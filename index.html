@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellular Automata Playground</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div class="controls">
+        <div class="menu-section">
+            <label for="ca-select">Select CA Rule:</label>
+            <select id="ca-select">
+                <option value="gameoflife">Conway's Game of Life</option>
+                <option value="rule30">Rule 30</option>
+                <option value="rule110">Rule 110</option>
+                <option value="rule90">Rule 90</option>
+                <option value="langton">Langton's Ant</option>
+                <option value="brain">Brian's Brain</option>
+                <option value="seeds">Seeds</option>
+                <option value="wireworld">Wireworld</option>
+                <option value="forestfire">Forest Fire</option>
+                <option value="maze">Maze</option>
+                <!-- Life-like CA rules -->
+                <option value="highlife">HighLife (Replicators)</option>
+                <option value="daynight">Day & Night (Symmetric)</option>
+                <option value="replicator">Replicator (Explosive)</option>
+                <option value="lifewithoutdeath">Life without Death (Immortal)</option>
+                <option value="twobytwo">2x2 (Block Patterns)</option>
+                <option value="morley">Morley (Fast Ships)</option>
+                <option value="vote">Vote (Democracy)</option>
+                <option value="coral">Coral (Organic Growth)</option>
+                <option value="cyclic">Cyclic (Color Waves)</option>
+                <option value="anneal">Anneal (Heat Diffusion)</option>
+                <!-- Elementary CA rules -->
+                <option value="rule54">Rule 54 (Sierpinski)</option>
+                <option value="rule60">Rule 60 (XOR)</option>
+                <option value="rule102">Rule 102 (Complex)</option>
+                <option value="rule126">Rule 126 (Chaotic)</option>
+                <option value="rule150">Rule 150 (Triangular)</option>
+                <option value="rule184">Rule 184 (Traffic)</option>
+                <option value="rule190">Rule 190 (Fractal)</option>
+                <option value="rule250">Rule 250 (OR)</option>
+                <!-- Other interesting CA -->
+                <option value="generations">Generations (Multi-state)</option>
+                <option value="starwars">Star Wars</option>
+                <option value="diamoeba">Diamoeba</option>
+                <option value="gnarl">Gnarl</option>
+                <option value="dotlife">DotLife</option>
+                <option value="pedestrian">Pedestrian Life</option>
+                <option value="stains">Stains</option>
+                <option value="coagulations">Coagulations</option>
+                <option value="worms">Worms</option>
+                <option value="bugs">Bugs</option>
+                <!-- CREATIVE & UNIQUE CA RULES -->
+                <option value="bbm">BBM (Billiard Ball Machine)</option>
+                <option value="hppgas">HPP Gas (Lattice Gas)</option>
+                <option value="critters">Critters (Reversible)</option>
+                <option value="stringthing">String Thing</option>
+                <option value="swapdiag">Swap On Diagonal</option>
+                <option value="tron">Tron (Trip-a-tron)</option>
+                <option value="sand">Sand Simulation</option>
+                <option value="bouncygas">Bouncy Gas</option>
+                <!-- EXPERIMENTAL & ARTISTIC CA -->
+                <option value="liquid">Liquid Simulation</option>
+                <option value="crystal">Crystal Growth</option>
+                <option value="plasma">Plasma Waves</option>
+                <option value="fabric">Fabric Weaving</option>
+                <option value="neural">Neural Network</option>
+                <option value="quantum">Quantum Dots</option>
+                <option value="magnetic">Magnetic Field</option>
+                <option value="gravity">Gravity Simulation</option>
+                <option value="chemistry">Chemical Reaction</option>
+                <option value="ecosystem">Ecosystem</option>
+                <option value="music">Musical Patterns</option>
+                <option value="fractal">Fractal Generator</option>
+                <option value="kaleidoscope">Kaleidoscope</option>
+                <option value="aurora">Aurora Borealis</option>
+                <option value="lightning">Lightning Bolts</option>
+                <!-- BIOLOGICAL & SELF-REPLICATING CA -->
+                <option value="virus">Virus Spread (Exponential)</option>
+                <option value="bacteria">Bacterial Colony</option>
+                <option value="mitosis">Cell Division (Mitosis)</option>
+                <option value="cancer">Cancer Growth</option>
+                <option value="slimemold">Slime Mold</option>
+                <option value="antcolony">Ant Colony</option>
+                <option value="flocking">Bird Flocking</option>
+                <option value="schooling">Fish Schooling</option>
+                <option value="mycelium">Fungal Mycelium</option>
+                <option value="evolution">Evolution Simulator</option>
+                <option value="dna">DNA Replication</option>
+                <option value="immune">Immune System</option>
+                <option value="neuron">Neural Growth</option>
+                <option value="roots">Root System</option>
+                <option value="algae">Algae Bloom</option>
+            </select>
+            <button id="spawn-btn">Spawn CA Region</button>
+        </div>
+        
+        <div class="interaction-section">
+            <button id="interaction-btn" class="active">Interactions: ON</button>
+            <button id="battle-btn">Battle: OFF</button>
+            <button id="invasion-btn">Create Invasion</button>
+        </div>
+        
+        <div class="brush-section">
+            <label for="brush-size">Brush Size:</label>
+            <input type="range" id="brush-size" min="1" max="20" value="3">
+            <span id="brush-size-value">3px</span>
+            <div class="brush-mode">
+                <button id="brush-mode-btn" class="active">Brush Mode</button>
+                <button id="eraser-mode-btn">Eraser</button>
+            </div>
+        </div>
+        
+        <div class="control-section">
+            <button id="play-pause-btn">Pause</button>
+            <button id="clear-btn">Clear All</button>
+            <button id="step-btn">Step</button>
+        </div>
+        
+        <div class="speed-section">
+            <label for="speed-slider">Speed:</label>
+            <input type="range" id="speed-slider" min="1" max="60" value="10">
+            <span id="speed-value">10 FPS</span>
+        </div>
+        
+        <div class="info-section">
+            <div id="active-cas">Active Cells: 0</div>
+            <div class="instructions">
+                Drag to paint with brush<br>
+                Eraser mode to remove cells<br>
+                Double-click for invasion patterns<br>
+                Right-click to erase temporarily<br>
+                
+                <div class="shortcuts">
+                    <strong>Keyboard Shortcuts:</strong><br>
+                    <span class="shortcut">B</span> - Toggle Brush/Eraser<br>
+                    <span class="shortcut">Space</span> - Pause/Play<br>
+                    <span class="shortcut">Ctrl+C</span> - Clear All<br>
+                    <span class="shortcut">[ ]</span> - Brush Size ±<br>
+                </div>
+                
+                <div class="interactions">
+                    <strong>CA Interactions:</strong><br>
+                    Forest Fire spreads to other CAs<br>
+                    Wireworld zaps neighbors<br>
+                    Seeds explode and take over<br>
+                    Game of Life slowly assimilates<br>
+                    Brian's Brain creates chaos<br>
+                    Langton's Ant tunnels through<br>
+                    Gnarl creates chaotic borders<br>
+                    Stains spread slowly<br>
+                    Bugs move randomly<br>
+                    Worms create linear patterns
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

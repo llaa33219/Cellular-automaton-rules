@@ -1,0 +1,325 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    overflow: hidden;
+}
+
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #111;
+    cursor: crosshair;
+    border: 1px solid #333;
+}
+
+.controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #444;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    min-width: 280px;
+    z-index: 1000;
+}
+
+.menu-section, .control-section, .speed-section, .info-section, .brush-section, .interaction-section {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.info-section {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #ccc;
+    font-size: 14px;
+}
+
+select, input[type="range"] {
+    width: 100%;
+    padding: 8px;
+    background: #222;
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+}
+
+select {
+    margin-bottom: 10px;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: #00ff88;
+    box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+}
+
+button {
+    padding: 10px 15px;
+    background: linear-gradient(45deg, #00ff88, #00cc6a);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #00cc6a, #00aa55);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#spawn-btn {
+    width: 100%;
+    margin-right: 0;
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+}
+
+#spawn-btn:hover {
+    background: linear-gradient(45deg, #e55a2b, #d1831a);
+}
+
+.control-section button {
+    width: calc(33.33% - 6px);
+    margin-right: 6px;
+    font-size: 12px;
+    padding: 8px 5px;
+}
+
+.control-section button:last-child {
+    margin-right: 0;
+}
+
+#speed-slider {
+    margin-bottom: 5px;
+}
+
+#speed-value {
+    font-size: 12px;
+    color: #aaa;
+    text-align: center;
+    display: block;
+}
+
+#active-cas {
+    font-weight: 600;
+    color: #00ff88;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.instructions {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.4;
+}
+
+.shortcuts, .interactions {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #444;
+}
+
+.shortcut {
+    background: #333;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #00ff88;
+    font-size: 11px;
+}
+
+.shortcuts strong, .interactions strong {
+    color: #ccc;
+    font-size: 11px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #222;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Animation for spawning */
+@keyframes spawn {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2) rotate(180deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+    }
+}
+
+.spawning {
+    animation: spawn 0.6s ease-out;
+}
+
+.brush-section {
+    border-bottom: 1px solid #333;
+}
+
+.brush-mode {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.brush-mode button {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 11px;
+    background: linear-gradient(45deg, #444, #555);
+    color: #ccc;
+}
+
+.brush-mode button.active {
+    background: linear-gradient(45deg, #00ff88, 00cc6a);
+    color: #000;
+}
+
+.brush-mode button:hover {
+    background: linear-gradient(45deg, #555, #666);
+}
+
+.brush-mode button.active:hover {
+    background: linear-gradient(45deg, #00cc6a, #00aa55);
+}
+
+#brush-size {
+    margin-bottom: 5px;
+}
+
+#brush-size-value {
+    font-size: 12px;
+    color: #aaa;
+    text-align: center;
+    display: block;
+}
+
+/* Brush cursor */
+:root {
+    --brush-size: 12px;
+    --brush-color: #00ff88;
+    --mouse-x: 0px;
+    --mouse-y: 0px;
+}
+
+.brush-cursor {
+    cursor: none;
+}
+
+.brush-cursor::before {
+    content: '';
+    position: fixed;
+    width: var(--brush-size);
+    height: var(--brush-size);
+    border: 2px solid var(--brush-color);
+    border-radius: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    left: var(--mouse-x, 0);
+    top: var(--mouse-y, 0);
+    opacity: 0.8;
+    box-shadow: 0 0 10px var(--brush-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brush-cursor::after {
+    content: '';
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: var(--brush-color);
+    border-radius: 0;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    left: var(--mouse-x, 0);
+    top: var(--mouse-y, 0);
+    opacity: 1;
+}
+
+.interaction-section {
+    border-bottom: 1px solid #333;
+}
+
+.interaction-section button {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    background: linear-gradient(45deg, #444, #555);
+    color: #ccc;
+}
+
+.interaction-section button.active {
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+    color: #000;
+}
+
+.interaction-section button:hover {
+    background: linear-gradient(45deg, #555, #666);
+    transform: translateY(-1px);
+}
+
+.interaction-section button.active:hover {
+    background: linear-gradient(45deg, #e55a2b, #d1831a);
+}
+
+#invasion-btn {
+    background: linear-gradient(45deg, #ff1744, #c62828) !important;
+    color: #fff !important;
+}
+
+#invasion-btn:hover {
+    background: linear-gradient(45deg, #d50000, #b71c1c) !important;
+} 
